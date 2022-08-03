@@ -1,6 +1,6 @@
 /***[ThuNderSoft]*************************************************************
 						   KUANG2 pSender: send_data
-								úùÄÍ WEIRD ÍÄùú
+								     WEIRD
 *****************************************************************************/
 
 #define W_FAST_ONLY
@@ -14,10 +14,10 @@
 
 #define RLEN 1024
 extern char temp[];		// ovo nam je slobodno kada se poziva send_data
-						// pa †e to biti bafer za prihvatanje poruka sa
+						// pa Ä‡e to biti bafer za prihvatanje poruka sa
 						// smtp servera
 
-// ovde se unosi spolja adresa servera, ne zaboravi da doda„ '\r\n'
+// ovde se unosi spolja adresa servera, ne zaboravi da dodaÅ¡ '\r\n'
 static char helo[50]={		// "HELO "
 	0x84, 0x54, 0xC4, 0xF4, 0x02, 0x00};
 char *smtp_server=&helo[5];
@@ -38,7 +38,7 @@ static char mailfrom[55]={		// "MAIL FROM:<ku@ng2>\r\n"
 	0xD4, 0x14, 0x94, 0xC4, 0x02, 0x64, 0x25, 0xF4, 0xD4, 0xA3, 0xC3,\
 	0xB6, 0x57, 0x04, 0xE6, 0x76, 0x23, 0x00};
 
-// ovde se unosi spolja adresa korisnika, ne zaboravi da doda„ '>\r\n'
+// ovde se unosi spolja adresa korisnika, ne zaboravi da dodaÅ¡ '>\r\n'
 static char rcptto[55]={		// "RCPT TO:<"
 	0x25, 0x34, 0x05, 0x45, 0x02, 0x45, 0xF4, 0xA3, 0xC3, 0x00};
 
@@ -48,7 +48,7 @@ static char *cmdend=&addrend[1];
 /*
 	answer
 	------
-  ş ita recive bafer (temp) i prva tri karaktera pretvara u broj koji
+  + Äita recive bafer (temp) i prva tri karaktera pretvara u broj koji
 	predstavlja odgovor smtp servera. */
 
 int answer(void) {
@@ -59,11 +59,11 @@ int answer(void) {
 /*
 	send_hard
 	---------
-  ş Radi samo slanje poruke. Imena hostova i slino se prethodno defini„u.
-  ş Ako je sve pro„lo kako treba vra†a 0, u suprotnom neku gre„ku.
-	1 -> gre„ka u komunikaciji...
-	2 -> ozbiljna gre„ka - server nije dobar ili ne mo‚e da se konektuje.
-  ş uoi da ako mi ukinu username na tim serverima i dalje †e da radi
+  + Radi samo slanje poruke. Imena hostova i sliÄno se prethodno definiÅ¡u.
+  + Ako je sve proÅ¡lo kako treba vraÄ‡a 0, u suprotnom neku greÅ¡ku.
+	1 -> greÅ¡ka u komunikaciji...
+	2 -> ozbiljna greÅ¡ka - server nije dobar ili ne moÅ¾e da se konektuje.
+  + uoÄi da ako mi ukinu username na tim serverima i dalje Ä‡e da radi
 	ovo sranje... osim ako ne promene ime servera :) */
 
 int send_hard (char *poruka)
@@ -75,53 +75,53 @@ int send_hard (char *poruka)
 
 	// Kreiramo Socket - Internet familija, Stream tip
 	S=socket(AF_INET, SOCK_STREAM, 0);
-	if (S==INVALID_SOCKET) return 2;	// err: ne mo‚e da otvori socket
+	if (S==INVALID_SOCKET) return 2;	// err: ne moÅ¾e da otvori socket
 	A.sin_family=AF_INET;				// familija: Internet
 	A.sin_port=htons(25);				// port 25: SMTP protokol
 
-	H=gethostbyname(smtp_server);		// na”i IP smtp servera
-	if (H==NULL) {						// ako ne mo‚e da resolve mo‚da je...
+	H=gethostbyname(smtp_server);		// naÄ‘i IP smtp servera
+	if (H==NULL) {						// ako ne moÅ¾e da resolve moÅ¾da je...
 		i=inet_addr(smtp_server);		// ...dat IP broj
-		if (i==INADDR_NONE) return 2;	// ipak gre„ka
+		if (i==INADDR_NONE) return 2;	// ipak greÅ¡ka
 		A.sin_addr.s_addr=i;
 	} else {
 		A.sin_addr.s_addr=*(unsigned long *)H->h_addr;	// preuzmi IP adresu
 	}
 
-	// Prikljui se na server
+	// PrikljuÄi se na server
 	i=connect(S, (struct sockaddr *) &A, sizeof(struct sockaddr) );
-	if (i) return 2;					// ne mo‚e da se prikjui na server
+	if (i) return 2;					// ne moÅ¾e da se prikjuÄi na server
 
-	i=0;								// oznaka da je sve dobro pro„lo
+	i=0;								// oznaka da je sve dobro proÅ¡lo
 
 	recv(S, temp, RLEN, 0);						// S: 220 Service Ready
-	if (answer()!=220) {i=1; goto send_end;}	// gre„ka
+	if (answer()!=220) {i=1; goto send_end;}	// greÅ¡ka
 
 	strcopyF(temp, helo); straddF(temp, cmdend);
 	send(S, temp, strlengthF(temp), 0);			// C: HELO sender_domain
 	recv(S, temp, RLEN, 0);						// S: 250 OK
-	if (answer()!=250) {i=1; goto send_end;}	// gre„ka
+	if (answer()!=250) {i=1; goto send_end;}	// greÅ¡ka
 
 	strcopyF(temp, mailfrom); straddF(temp, addrend);
 	send(S, temp, strlengthF(temp), 0);			// C: MAIL FROM: <reverse_path>
 	recv(S, temp, RLEN, 0);						// S: 250 OK
-	if (answer()!=250) {i=1; goto send_end;}	// gre„ka
+	if (answer()!=250) {i=1; goto send_end;}	// greÅ¡ka
 
 	strcopyF(temp, rcptto); straddF(temp, addrend);
 	send(S, temp, strlengthF(temp), 0);			// C: RCPT TO: <forward_path>
 	recv(S, temp, RLEN, 0);						// S: 250 OK
-	if (answer()!=250) {i=1; goto send_end;}	// gre„ka
+	if (answer()!=250) {i=1; goto send_end;}	// greÅ¡ka
 
 	send(S, data, strlengthF(data), 0);			// C: DATA
 	recv(S, temp, RLEN, 0);						// S: 354 Start mail input
-	if (answer()!=354) {i=1; goto send_end;};	// gre„ka
+	if (answer()!=354) {i=1; goto send_end;};	// greÅ¡ka
 
 	send(S, header, strlengthF(header), 0);		// C: poruka (nema response)
 
 //	send(S, poruka, strlengthF(poruka), 0);		// C: poruka (nema response)
 	k=strlengthF(poruka); j=0;
 	while (k>1024) {
-		send(S, &poruka[j], 1024, 0);			// po„alji 1 KB poruke
+		send(S, &poruka[j], 1024, 0);			// poÅ¡alji 1 KB poruke
 		k-=1024; j+=1024;
 	}
 	send(S, &poruka[j], k, 0);					// C: ostatak poruke
@@ -129,23 +129,23 @@ int send_hard (char *poruka)
 
 	send(S, "\r\n.\r\n", 5, 0);                 // C: <CRLF>.<CRLF>
 	recv(S, temp, RLEN, 0);						// S: 250 OK
-	if (answer()!=250) {i=1; goto send_end;}	// gre„ka
+	if (answer()!=250) {i=1; goto send_end;}	// greÅ¡ka
 
 send_end:
 	send(S, quit, strlengthF(quit), 0);			// C: QUIT
 	recv(S, temp, RLEN, 0);						// R: 221 Closing Connection
-												// za ovo nam ne treba provera gre„ki
+												// za ovo nam ne treba provera greÅ¡ki
 
 	closesocket(S);
-	return i;		// i!=0 -> gre„ka; i==0 sve je ok
+	return i;		// i!=0 -> greÅ¡ka; i==0 sve je ok
 }
 
 
 /*
 	send_data
 	---------
-  ş „alje bafer (string) na e-mail
-  ş ako je sve pro„lo kako treba vra†a 0! */
+  + Å¡alje bafer (string) na e-mail
+  + ako je sve proÅ¡lo kako treba vraÄ‡a 0! */
 
 int send_data(char *b)
 {
