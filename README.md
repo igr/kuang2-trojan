@@ -1,2 +1,2 @@
-# kuang2-trojan
-Kunag2 - Trojan
+# Kuang2 - Trojan
+
